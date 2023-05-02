@@ -1,23 +1,47 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState} from 'react';
+import MovieList from './MovieList';
+import AddMovie from './AddMovie';
+import Trailerstarwars from './Trailerstarwars';
+import { Route, Routes } from 'react-router-dom';
+import Filter from './Filter';
 
 function App() {
+  const [KeyWords, setKeyWords] =useState('')
+  const [rate, setrate]= useState(1)
+  const [movies, setMovies ]= useState([
+    {id:1, img :" https://fr.web.img4.acsta.net/pictures/15/10/18/18/56/052074.jpg",  name:"starwars", description:"kthry"},
+    {id:2, img :" https://fr.web.img4.acsta.net/r_1280_720/pictures/22/09/14/10/01/0595808.jpg",name:"smile", description:"kthry"},
+    {id:3, img :" https://fr.web.img6.acsta.net/pictures/22/12/02/16/03/2536613.jpg", name:"babylon", description:"kthry"},
+  ])
+
+  const AddNewMovie = (newMovie) => {
+    setMovies ([...movies , newMovie])
+  }
+  const searchMov = (text) => {
+    setKeyWords (text)
+  }
+  const searchRate=(number)=>{
+    setrate(number)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+            <Routes>
+
+      <Route path='/' element={
+        <>
+      <AddMovie AddNewMovie={AddNewMovie} />
+      <Filter searchMov ={searchMov} searchRate={searchRate}/>
+      <hr></hr>
+      <MovieList movies={movies.filter(elm => elm.name.includes(KeyWords.toLowerCase().trim()))}/>
+      
+      </> 
+            } />
+            <Route  exact path='/Trailerstarwars/:id'   element={<Trailerstarwars movies={movies} />}/>
+            </Routes>
+      
+      
+      
     </div>
   );
 }
